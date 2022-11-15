@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Akad{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <h2 class=""><i class="fa-solid fa-people-pulling"></i> Data Pernikahan</h2>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Calon Suami</th>
+                  <th>Nama Calon Istri</th>
+                  <th>Wali</th>
+                  <th>Penghulu</th>
+                  <th>Tanggal Akad</th>
+                  <th>Mahar</th>
+                  <th>Tempat Akad</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for akad in akadList %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{akad.suami}}</td>
+                        <td>{{akad.istri}}</td>
+                        <td>
+                            {% for wali in akad.wali_set.all %}
+                            {% if wali.meninggal %}
+                                <span class="text-danger">{{wali.nama}}</span>
+                            {% else %}
+                                {{wali.nama}}
+                            {% endif %}
+                            <br>
+                            {% endfor %}
+                        </td>
+                        <td>{{akad.penghulu}}</td>
+                        <td>{{akad.waktuAkad}}</td>
+                        <td>{{akad.mahar}}</td>
+                        <td>{{akad.lokasi}}</td>
+                        <td nowrap>
+                            {% if akad.status %}
+                            <b class="p-1 bg-success rounded">Sudah Diperiksa</b>
+                            {% else %}
+                            <b class="p-1 bg-warning rounded">Belum Diperiksa</b>
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary "><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                <tr>
+                  
+                </tr>
+                
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Calon Suami</th>
+                    <th>Nama Calon Istri</th>
+                    <th>Wali</th>
+                    <th>Penghulu</th>
+                    <th>Tanggal Akad</th>
+                    <th>Mahar</th>
+                    <th>Tempat Akad</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+    </div>
+    <!-- /.col-md-6 -->
+  </div>
+  
+{% endblock content %}
