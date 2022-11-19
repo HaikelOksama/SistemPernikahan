@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Data Suami{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        {% if page == 'Data Suami' %}
+        <div class="card">
+            <div class="card-header">
+              <h2 class=""><i class="fa-solid fa-person"></i> Informasi Data Suami</h2>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped table-responsive">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Foto</th>
+                  <th>Nama Suami</th>
+                  <th>NIK</th>
+                  <th>Tempat Lahir</th>
+                  <th>Tanggal Lahir</th>
+                  <th>Alamat</th>
+                  <th>Pekerjaan</th>
+                  <th>Status Sebelummnya</th>
+                  <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for suami in suamiList %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><img src="{{suami.fotoSuami.url}}" alt="" srcset="" width="150" height="200" class="img-fluid"></td>
+                        <td>{{suami}}</td>
+                        <td>{{suami.nomorKtpSuami}}</td>
+                        <td>{{suami.tempatLahirSuami}}</td>
+                        <td>{{suami.tanggalLahirSuami}}</td>
+                        <td>{{suami.alamatSuami}}</td>
+                        <td>{{suami.pekerjaanSuami}}</td>
+                        <td>{{suami.get_statusSuami_display}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'edit-suami' suami.id %}"><button class="btn btn-primary "><i class="fa-solid fa-pen-to-square"></i></button></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+              
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Foto</th>
+                        <th>Nama Suami</th>
+                        <th>NIK</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Alamat</th>
+                        <th>Pekerjaan</th>
+                        <th>Status Sebelummnya</th>
+                        <th>Aksi</th>
+                      </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        {% else %}
+        <div class="card">
+            <div class="card-header">
+              <h2 class=""><i class="fa-solid fa-person-dress"></i></i> Informasi Data Istri</h2>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped table-responsive">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Foto</th>
+                  <th>Nama Istri</th>
+                  <th>NIK</th>
+                  <th>Tempat Lahir</th>
+                  <th>Tanggal Lahir</th>
+                  <th>Alamat</th>
+                  <th>Pekerjaan</th>
+                  <th>Status Sebelummnya</th>
+                  <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for istri in istriList %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><img src="{{istri.fotoIstri.url}}" alt="" srcset="" width="150" height="200" class="img-fluid"></td>
+                        <td>{{istri}}</td>
+                        <td>{{istri.nomorKtpIstri}}</td>
+                        <td>{{istri.tempatLahirIstri}}</td>
+                        <td>{{istri.tanggalLahirIstri}}</td>
+                        <td>{{istri.alamatIstri}}</td>
+                        <td>{{istri.pekerjaanIstri}}</td>
+                        <td>{{istri.get_statusIstri_display}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'edit-istri' istri.id %}"><button class="btn btn-primary "><i class="fa-solid fa-pen-to-square"></i></button></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+              
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Foto</th>
+                        <th>Nama Istri</th>
+                        <th>NIK</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Alamat</th>
+                        <th>Pekerjaan</th>
+                        <th>Status Sebelummnya</th>
+                        <th>Aksi</th>
+                      </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        {% endif %}
+    </div>
+    <!-- /.col-md-6 -->
+  </div>
+  
+{% endblock content %}
+{% block script %}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  });
+</script>
+{% endblock script %}
+
+

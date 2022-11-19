@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{page}}{% endblock title %}.
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3>
+                    {% if page == 'Ubah Data Wali' %}
+                    <i class="fa-solid fa-pen"></i> Data Wali {{wali.nama}}
+                    {% else %}
+                    Tambah Data Wali
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy}}
+                    <button class="btn btn-primary mt-3" type="submit">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

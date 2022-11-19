@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{page}}{% endblock title %}.
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form method='post' enctype="multipart/form-data" id="akad">
+            {% csrf_token %}
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Data Suami</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <div class="card-body">
+                    {{formSuami |crispy}}     
+                  </div>
+                    <!-- /.card-body -->
+                </div>
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Data Istri</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <div class="card-body">
+                    {{formIstri|crispy}}              
+                  </div>
+                    <!-- /.card-body -->
+                </div>
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Akad Nikah</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <div class="card-body">
+                    {{formAkad|crispy}}               
+                  </div>
+                    <!-- /.card-body -->
+                </div>
+                             
+                  <center><input id="submit-akad" type="submit" class="btn btn-outline-primary w-75" value="Daftar Pernikahan"></input></center>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% endblock content %}

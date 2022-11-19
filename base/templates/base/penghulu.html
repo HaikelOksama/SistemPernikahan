@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Data Penghulu{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <h2 class=""><i class="fa-solid fa-user-tie"></i> Informasi Data Penghulu</h2>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="d-flex align-content-end justify-content-end">
+
+                    <a href="{% url 'tambah-penghulu' %}"><button class="align-self-end btn btn-success mb-3"><i class="fa-solid fa-plus"></i> Data Penghulu Baru</button></a>
+                  </div>
+              <table id="example1" class="table table-bordered table-striped w-100">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Penghulu</th>
+                  <th class="text-center">Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for penghulu in penghulu %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{penghulu}}</td>
+                        <td  class="text-center">
+                            
+                                <a href="{% url 'edit-penghulu' penghulu.id %}"><button class="btn btn-primary w-25"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                                <a href="{% url 'hapus-penghulu' penghulu.id %}"><button class="btn btn-danger w-25"><i class="fa-solid fa-trash"></i></button></a>
+                           
+                        </td>
+                    </tr>
+                    {% endfor %}
+              
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Penghulu</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <!-- /.col-md-6 -->
+  </div>
+  
+{% endblock content %}
+{% block script %}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  });
+</script>
+{% endblock script %}
+
+

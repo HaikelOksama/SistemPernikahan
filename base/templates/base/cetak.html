@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Cetak Data Pernikahan{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <h2 class=""><i class="fa-solid fa-print"></i> Cetak Data Pernikahan</h2>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="d-flex align-content-end justify-content-end">
+
+                    <a target="_blank" href="{% url 'cetak-akad' %}?aksi=cetak"><button class="align-self-end btn btn-success mb-3"><i class="fa-solid fa-print"></i> Cetak Data</button></a>
+                  </div>
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Calon Suami</th>
+                      <th>Nama Calon Istri</th>
+                      <th>Wali</th>
+                      <th>Penghulu</th>
+                      <th>Tanggal Akad</th>
+                      <th>Mahar</th>
+                      <th>Tempat Akad</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for akad in akad %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{akad.suami}}</td>
+                            <td>{{akad.istri}}</td>
+                            <td>
+                                {% for wali in akad.wali_set.all %}
+                                {% if wali.meninggal %}
+                                    <span class="text-danger">{{wali.nama}}</span>
+                                {% else %}
+                                    {{wali.nama}}
+                                {% endif %}
+                                <br>
+                                {% endfor %}
+                            </td>
+                            <td>{{akad.penghulu}}</td>
+                            <td>{{akad.waktuAkad}}</td>
+                            <td>{{akad.mahar}}</td>
+                            <td>{{akad.lokasi}}</td>
+                            <td nowrap>
+                                {% if akad.diperiksa %}
+                                <b class="p-1 bg-success rounded">Sudah Diperiksa</b>
+                                {% else %}
+                                <b class="p-1 bg-warning rounded">Belum Diperiksa</b>
+    
+                                {% endif %}
+                            </td>
+                            <td>
+           
+                                  
+                                    <a target="_blank" href="{% url 'cetak-detail' akad.id %}?aksi=cetak"><button class="btn btn-info"><i class="fa-solid fa-print"></i></i></button></a>
+                                    
+                     
+                            </td>
+                        </tr>
+                        {% endfor %}
+                  
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Calon Suami</th>
+                        <th>Nama Calon Istri</th>
+                        <th>Wali</th>
+                        <th>Penghulu</th>
+                        <th>Tanggal Akad</th>
+                        <th>Mahar</th>
+                        <th>Tempat Akad</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <!-- /.col-md-6 -->
+  </div>
+  
+{% endblock content %}
+{% block script %}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  });
+</script>
+{% endblock script %}
+
+

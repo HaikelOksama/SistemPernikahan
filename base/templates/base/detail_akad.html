@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Detail Pernikahan{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline">
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="card card-primary">
+                      <div class="card-header">
+                          <h2><i class="fa-solid fa-pen"></i> Informasi Pernikahan</h2>
+                      </div>
+                      <div class="card-body">
+                          {{form.suami|as_crispy_field}}
+                          {{form.istri|as_crispy_field}}
+                          {{form.penghulu|as_crispy_field}}
+                          {{form.waktuAkad|as_crispy_field}}
+                          {{form.jamAkad|as_crispy_field}}
+                          {{form.mahar|as_crispy_field}}
+                          {{form.lokasi|as_crispy_field}}
+                      </div>
+                      <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                      </div>
+                    </div>
+                </form>
+              <div class="card card-primary">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-pen"></i> Informasi Perwalian</h2>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-content-end justify-content-end">
+        
+                        <a href="{% url 'tambah-wali' akad.id %}"><button class="align-self-end btn btn-success mb-3"><i class="fa-solid fa-plus"></i> Tambahkan Wali</button>
+                        </a>
+                        </div>
+                    <small class="text-muted">*Data dengan text berwarna merah menandakan data orang yang telah meninggal dunia</small>
+                    <table id="example1" class="table table-bordered table-striped w-100">
+                        <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Nama Wali</th>
+                          <th>Hubungan</th>
+                          <th>Dari Pihak</th>
+                          <th>Tempat Lahir</th>
+                          <th>Tanggal Lahir</th>
+                          <th>Agama</th>
+                          <th>Pekerjaan</th>
+                          <th>Aksi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for wali in akad.wali_set.all %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>
+                                    {% if wali.meninggal %}
+                                        <span class="text-danger">{{wali.nama}}</span>
+                                    {% else %}
+                                        {{wali.nama}}
+                                    {% endif %}
+                                    <br>
+                                </td>
+                                <td>{{wali.get_hubungan_display}}</td>
+                                <td>{{wali.get_pihak_display}}</td>
+                                <td>{{wali.tempatLahir}}</td>
+                                <td>{{wali.tanggalLahir}}</td>
+                                <td>{{wali.agama}}</td>
+                                <td>{{wali.pekerjaan}}</td>
+                                <td>
+                                    <div class="btn-group">
+        
+                                        <a href="{% url 'ubah-wali' akad.id wali.id %}"><button class="btn btn-primary "><i class="fa-solid fa-pen-to-square"></i></button></a>
+                                        <a href="{% url 'hapus-wali' akad.id wali.id %}"><button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}           
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Wali</th>
+                                <th>Hubungan</th>
+                                <th>Dari Pihak</th>
+                                <th>Tempat Lahir</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Agama</th>
+                                <th>Pekerjaan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </tfoot>
+                      </table>
+                </div>
+                
+              </div>
+            </div>
+        
+      <div class="card-footer border border-top-3 border-dark">
+
+          <form action="" method="post">
+            {% csrf_token %}
+            <center><div class="form-check ml-4">
+              <b>{{form.diperiksa|as_crispy_field}}</b>
+  
+          </div></center>
+            <center><button type="submit" class="btn btn-outline-primary w-50 ml-4">Konfirmasi Data</button></center>
+        </form>
+      </div>
+
+    </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  });
+
+ 
+  document.getElementById("id_diperiksa").required = "true";             
+ 
+</script>
+{% endblock %}

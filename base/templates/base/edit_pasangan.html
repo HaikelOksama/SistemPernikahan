@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{{page}}{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        {% if page == 'Ubah Data Suami' %}
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3>Update {{suami}}</h3>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy }}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+        {% else %}
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3>Update {{istri}}</h3>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy }}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+
