@@ -29,14 +29,34 @@
                     {% for penghulu in penghulu %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td>{{penghulu}}</td>
+                        <td class="w-75">{{penghulu}}</td>
                         <td  class="text-center">
                             
                                 <a href="{% url 'edit-penghulu' penghulu.id %}"><button class="btn btn-primary w-25"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                                <a href="{% url 'hapus-penghulu' penghulu.id %}"><button class="btn btn-danger w-25"><i class="fa-solid fa-trash"></i></button></a>
+                                <button id='del{{penghulu.id}}' class="btn btn-danger w-25"><i class="fa-solid fa-trash"></i></button>
                            
                         </td>
                     </tr>
+                    <script>
+                      const btn{{penghulu.id}} = document.getElementById("del{{penghulu.id}}");
+                      btn{{penghulu.id}}.addEventListener('click', ()=>{
+                              Swal.fire({
+                                  title: 'Anda Yakin Ingin Menghapus Data Ini?',
+                                  text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonColor: '#d33',
+                                  cancelButtonColor: '#3085d6',
+                                  confirmButtonText: 'Hapus',
+                                  cancelButtonText: 'Batalkan',
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    window.open("{% url 'hapus-penghulu' penghulu.id %}");
+                                  }
+                                })
+                          })
+                      
+                    </script>
                     {% endfor %}
               
                 </tbody>
@@ -63,6 +83,8 @@
       "responsive": true, "lengthChange": false, "autoWidth": false,
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
+
+  
 </script>
 {% endblock script %}
 

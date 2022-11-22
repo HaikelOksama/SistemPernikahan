@@ -116,6 +116,10 @@ TIME_INPUT_FORMATS = [
     '%H:%M',
     ]
 
+DATETIME_INPUT_FORMATS = [
+    '%d-%m-%Y %H:%M',
+]
+ 
 LANGUAGE_CODE = 'id'
 
 TIME_ZONE = 'Asia/Jakarta'

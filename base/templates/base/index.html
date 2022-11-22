@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock title %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline  bg-light ">
+        <div class="card-header bg-white">
+            <h1 class="text-center"> <b>Selamat Datang!</b></h1>
+        </div>
+        <div class="card-bodyp-5 p-5 m-5">
+            <p class="card-text text-center">
+                Website ini merupakan Sistem Informasi Pendaftaran Pernikahan KUA, dimana dapat mencatat seluruh kegiatan administrasi 
+                pendaftaran pernikahan <br> <br>
+                Anda saat ini login sebagai 
+                {% if request.user.is_superuser %}
+                <b>{{request.user}}| Admin </b>
+                {% else %}
+                <b>{{request.user}}| Member</b>
+                {% endif %} 
+            </p>
+
+            {% if not request.user.is_superuser %}
+                {% if akadUser is None %}
+                <p>Belum ada akad yang diajukan</p>
+                {% else %}
+                <p>Lihat Akad</p>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="card card-info card-outline">
+            <div class="card-header text-center">
+                <h3>Informasi Pernikahan</h3>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center justify-content-center" >
+                    <div class="col-lg-4 col-12">
+                      <!-- small box -->
+                      <div class="small-box bg-info">
+                        <div class="inner">
+                          <h3>{{akad.count}}</h3>
+          
+                          <p>Jumlah Pengajuan Akad</p>
+                        </div>
+                        <div class="icon">
+                        <i class="fa-regular fa-folder-open"></i>
+                        </div>
+                        <a href="{% url 'akad' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-4 col-12">
+                      <!-- small box -->
+                      <div class="small-box bg-success">
+                        <div class="inner">
+                          <h3>{{pending.count}}</h3>
+          
+                          <p>Jumlah Akad Pending</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa-regular fa-hand"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Data masih perlu verifikasi </a>
+                      </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-4 col-12">
+                      <!-- small box -->
+                      <div class="small-box bg-primary">
+                        <div class="inner">
+                          <h3>{{penghulu.count}}</h3>
+          
+                          <p>Jumlah Penghulu</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa-solid fa-people-roof"></i>
+                        </div>
+                        <a href="{% url 'penghulu' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      </div>
+                    </div>
+                    
+                    <!-- ./col -->
+                  </div>
+            </div>
+        </div>
+        
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -3,9 +3,66 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+from datetime import date
 
 from .models import Suami, Istri, Penghulu, Akad, Wali
-from .forms import AkadForm, PenghuluForm, SuamiForm, IstriForm, AkadEditForm, WaliForm, KonfirmasiForm
+from .forms import AkadForm, PenghuluForm, SignUpForm, SuamiForm, IstriForm, AkadEditForm, WaliForm, KonfirmasiForm, ProfileForm, UserForm
+
+def landing(request):
+    return render(request, 'base/start.html', {})
+
+def register(request):
+    userForm = SignUpForm()
+    if request.method == 'POST':
+        userForm = SignUpForm(request.POST)
+        if userForm.is_valid():
+            print(request.POST)
+            newUser = userForm.save()
+            print(newUser)
+            messages.success(request, 'daftarSukses')
+            return redirect('landing')
+
+            
+    context = {
+        'userForm': userForm,
+    }
+    return render(request, 'base/register.html', context)
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('landing')
+    if request.method == 'POST':
+        print(request.POST)
+        usernameIn = request.POST['username']
+        passwordIn = request.POST['password']
+        
+        user = authenticate(request, username = usernameIn, password=passwordIn)
+        if user is not None:
+            auth = User.objects.get(username=usernameIn)
+            login(request, user)
+            return redirect('index')
+        else:
+            messages.error(request, 'Username or Password anda Salah!')
+
+    return render(request, 'base/login.html')
+
+def index(request):
+    page = 'Dashboard'
+    akad = Akad.objects.all()
+    pending = Akad.objects.filter(diperiksa = False)
+    penghulu = Penghulu.objects.all()
+    akadUser = Akad.objects.filter(user = request.user)
+    context = {
+        'page': page,
+        'akad': akad,
+        'akadUser': akadUser,
+        'penghulu': penghulu,
+        'pending': pending,
+    }
+    return render(request, 'base/index.html', context)
 
 def akad_view(request):
     page = 'Akad'
@@ -168,7 +225,7 @@ def edit_suami_view(request, pk):
         form = SuamiForm(request.POST,request.FILES, instance=suami)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Data Suami {form.nama} Berhasil Dirubah')
+            messages.success(request, f'Data Suami {suami} Berhasil Dirubah')
             return redirect('data-suami')
 
     context = {
@@ -187,7 +244,7 @@ def edit_istri_view(request, pk):
         form = IstriForm(request.POST,request.FILES, instance=istri)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Data Istri {form.nama} Berhasil Dirubah')
+            messages.success(request, f'Data Istri {istri} Berhasil Dirubah')
             return redirect('data-istri')
 
     context = {
@@ -251,8 +308,11 @@ def hapus_penghulu(request, pk):
     return redirect('penghulu')
 
 def cetak_data(request, akad=None):
-
+    page = "Cetak"
     html = 'cetak.html'
+    now = date.today().strftime('%d %B %Y')
+    print(now)
+    dateMsg = f"Pekanbaru, {now}"
     if 'aksi' in request.GET:
         if request.GET['aksi'].lower() == 'cetak':
             print(request.GET['aksi'])
@@ -260,9 +320,9 @@ def cetak_data(request, akad=None):
           
     if akad != None:
         akad = Akad.objects.get(id=akad)
-        page = 'single'
+        pageName = 'single'
     else:
         akad = Akad.objects.filter(diperiksa=True)
-        page = 'all'
+        pageName = 'all'
     
-    return render(request, f'base/{html}', context={'akad': akad, 'page': page})
+    return render(request, f'base/{html}', context={'akad': akad, 'pageName': pageName, 'page':page, 'dateMsg': dateMsg})

@@ -1,0 +1,43 @@
+{% extends 'landing.html' %}
+
+{% block content %}
+<div class="content-wrapper max-h container-fluid transparent text-center text-light">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content mt-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 p-5 text-center"> 
+            <h1><b>SISTEM INFORMASI <br> PENDAFTARAN PERNIKAHAN</b></h1>
+            <center><div class="border-bottom border-light w-25"></div></center>
+          </div>
+            
+            <div class="col-12">
+                <p style="opacity: 0.8; font-size: 16px;">
+                    Sistem yang memudahkan dalam melakukan proses pendaftaran pernikahan di Kantor Urusan Agama dengan Mudah dan Cepat
+                </p>
+                <a href="{% url 'register' %}" class="btn rounded-button btn-lg text-white">Daftar Sekarang</a>
+            </div>
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+
+<style>
+    h1 {
+        font-size: 50px;
+    }
+    .rounded-button {
+        border-radius: 20px;
+        font-size: 17px;
+        background-color: rgb(252, 140, 3);
+    }
+</style>
+{% endblock content %}

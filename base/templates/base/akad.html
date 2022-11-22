@@ -66,7 +66,7 @@
                             <div class="btn-group">
                                 {% if akad.diperiksa == False%}
                                 <a href="{% url 'detail_akad' akad.id %}"><button class="btn btn-primary "><i class="fa-solid fa-pen-to-square"></i></button></a>
-                                <a href="{% url 'hapus_akad' akad.id %}"><button class="btn btn-danger"><i class="fa-solid fa-trash"></i></button></a>
+                                <button id="del{{akad.id}}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
                                 {% else %}
                                 -
                                 {% endif %}
@@ -74,6 +74,25 @@
                             </div>
                         </td>
                     </tr>
+                    <script>
+                      const btn{{akad.id}} = document.getElementById("del{{akad.id}}");
+                      btn{{akad.id}}.addEventListener('click', ()=>{
+                              Swal.fire({
+                                  title: 'Anda Yakin Ingin Menghapus Data Ini?',
+                                  text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonColor: '#d33',
+                                  cancelButtonColor: '#3085d6',
+                                  confirmButtonText: 'Hapus',
+                                  cancelButtonText: 'Batalkan',
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    window.open("{% url 'hapus_akad' akad.id %}");
+                                  }
+                                })
+                          })
+                    </script>
                     {% endfor %}
               
                 </tbody>

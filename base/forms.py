@@ -1,6 +1,38 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Akad, Suami, Istri, Penghulu, Wali
+from .models import Akad, Suami, Istri, Penghulu, Wali, Profile
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm  
+from django.core.exceptions import ValidationError  
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['namaLengkap']
+   
+        widgets = {
+            'namaLengkap': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Lengkap'}),
+        }
+
+class UserForm(UserCreationForm):
+    username = forms.CharField(label='' , max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))  
+   
+    password1 = forms.CharField(label='password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))  
+    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Konfirmasi Password'}))  
+    
+    class Meta:
+        model = User
+        fields = '__all__'
+        
+class SignUpForm(UserCreationForm):
+    username = forms.CharField(label='Username' , max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))  
+    first_name = forms.CharField(label='Nama' , max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Anda'})) 
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))  
+    password2 = forms.CharField(label='Konfirmasi Password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Konfirmasi Password'}))  
+    class Meta:
+        model = User
+        fields = ["first_name","username", "password1", "password2"]
+
 
 class SuamiForm(ModelForm):
     class Meta:

@@ -1,0 +1,111 @@
+
+{% extends 'landing.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+  .bg-glass {
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+</style>
+<div class="register-page content-wrapper max-h container-fluid transparent text-center">
+  <!-- Content Header (Page header) -->
+  <!-- /.content-header -->
+
+  <div class="register-box ">
+    <div class="card card-outline card-primary bg-glass text-white">
+      <div class="card-header text-center">
+        <a href="" class="h1"><b>SisFo</b>Pernikahan</a>
+        <p>KUA Suliki, Lima Puluh Kota</p>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Pendaftaran Baru</p>
+        <form action="" method="post" class="text-left">
+          {% csrf_token %}  
+          {{userForm|crispy}}
+          <div class="row">
+            
+            
+              
+            <!-- /.col -->
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+            </div>
+            <a href="{% url 'login' %}" class="text-center text-success">Sudah punya akun? Login di Sini!</a>
+            <!-- /.col -->
+          </div>
+        </form>
+        {% comment %} <form method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            {{profileForm}}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{userForm.username}}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{userForm.password1}}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+            
+          </div>
+         
+          <div class="input-group mb-3">
+            {{userForm.password2}}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <p class="text-danger">
+            {% if messages %}
+              {% for message in message %}
+              {{message}}
+              {% endfor %}
+            {% endif %}
+           
+          </p>
+          <div class="row">
+            
+            
+              
+            <!-- /.col -->
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+   {% endcomment %}
+        
+  
+        
+      </div>
+      <!-- /.form-box -->
+    </div><!-- /.card -->
+  </div>
+</div>
+
+{% endblock content %}

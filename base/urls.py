@@ -3,6 +3,12 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+    path('landing-page/', views.landing, name='landing'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
+    
+    path('', views.index, name='index'),
+    
     path("akad/", views.akad_view, name="akad"),
     path("akad/baru/", views.daftar_akad_view, name="daftar_akad"),
     path("akad/hapus/<int:pk>/", views.hapus_akad, name="hapus_akad"),

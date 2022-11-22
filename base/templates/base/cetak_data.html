@@ -16,29 +16,29 @@
     <h2 class="text-center text-bold">Sistem Informasi Pernikahan Kantor Urusan Agama</h2>
     <h2 class="text-center text-bold">Kota Pekanbaru</h2>
     <hr>
-    {% if page == 'all' %}
+    {% if pageName == 'all' %}
         <h2 class="text-center">Data Seluruh Pernikahan</h2>
-        <table class="table table-bordered table-responsive">
+        <table class="table table-bordered">
         <thead>
             <tr>
-            <th>No</th>
-            <th >Nama Calon Suami</th>
-            <th >Nama Calon Istri</th>
-            <th >Wali</th>
-            <th>Penghulu</th>
-            <th >Tanggal Akad</th>
-            <th >Waktu Akad</th>
-            <th >Mahar</th>
-            <th >Tempat Akad</th>
-            <th >Status</th>
+                <th>No</th>
+                <th >Nama Calon Suami</th>
+                <th >Nama Calon Istri</th>
+                <th >Wali</th>
+                <th>Penghulu</th>
+                <th >Tanggal Akad</th>
+                <th >Waktu Akad</th>
+                <th >Mahar</th>
+                <th >Tempat Akad</th>
+                <th >Status</th>
             </tr>
         </thead>
         <tbody>
             {% for akad in akad %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td >{{akad.suami}}</td>
-                <td >{{akad.istri}}</td>
+                <td nowrap>{{akad.suami}}</td>
+                <td nowrap>{{akad.istri}}</td>
                 <td>
                     {% for wali in akad.wali_set.all %}
                     {% if wali.meninggal %}
@@ -49,9 +49,9 @@
                     <br>
                     {% endfor %}
                 </td>
-                <td >{{akad.penghulu}}</td>
+                <td nowrap>{{akad.penghulu}}</td>
                 <td >{{akad.waktuAkad}}</td>
-                <td >{{akad.jamAkad}}</td>
+                <td >{{akad.jamAkad|time:"H:i" }}</td>
                 <td >{{akad.mahar}}</td>
                 <td >{{akad.lokasi}}</td>
                 <td >
@@ -63,8 +63,24 @@
                     {% endif %}
                 </td>
             </tr>
+            
             {% endfor %}
         </tbody>
+        <tfoot>
+            <tr >
+                <td colspan="10" class="text-right">
+                    {{dateMsg}}
+                    <br>
+                    <br>
+       
+                    <br>
+                    <u>Nama Kepala</u>
+                    <br>
+                    NIP 1231512322131254
+                </td>
+                
+            </tr>
+        </tfoot>
         </table>
     {% else %}
     <h2 class="text-center">Data Pernikahan {{akad}}</h2>
@@ -112,6 +128,21 @@
                     <td>{{akad.lokasi}}</td>
                 </tr>
             <tbody>
+                <tfoot>
+                    <tr >
+                        <td colspan="10" class="text-right">
+                            {{dateMsg}}
+                            <br>
+                            <br>
+               
+                            <br>
+                            <u>Nama Kepala</u>
+                            <br>
+                            NIP 1231512322131254
+                        </td>
+                        
+                    </tr>
+                </tfoot>
         </table>
     {% endif %}
 
