@@ -23,10 +23,17 @@
             </p>
 
             {% if not request.user.is_superuser %}
-                {% if akadUser is None %}
-                <p>Belum ada akad yang diajukan</p>
+                {% if akadUser.count == 0 %}
+                <p class="text-center">Saat ini anda belum mengisi data pendaftaran akad nikah, silahkan menuju menu <b>Daftar Akad</b></p>
+                <center><a href="{% url 'daftar_akad' %}" class="btn btn-outline-primary">Daftar Akad</a></center>
                 {% else %}
-                <p>Lihat Akad</p>
+                <p class="text-center">Saat ini pihak KUA telah menerima data yang anda berikan, silahkan konfirmasi kepada pihak KUA Suliki untuk informasi lebih lanjut</p>
+                <center><small>Status Akad</small></center>
+                {% if akadUser.diperiksa %}
+                <center><a href="{% url 'detail_akad' akadUser.id %} " class="btn btn-primary">Sudah Diperiksa</a></center>
+                {% else %}
+                <center><a href="{% url 'detail_akad' akadUser.id%}" class="btn btn-warning">Belum Diperiksa</a></center>
+                {% endif %}
                 {% endif %}
             {% endif %}
         </div>

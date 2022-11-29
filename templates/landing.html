@@ -119,12 +119,17 @@
 <script>
   
 {% for message in messages %}
-  {% if message == 'daftarSukses' %}
+  {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
   Swal.fire({
     icon: 'success',
     title: '<strong>Pendaftaran Sukses</strong>',
     html: '<b>Terimakasih sudah melakukan pendaftaran</b>, Selanjutnya silahkan login untuk mulai memasukkan data Akad',
     footer: '<a href="{% url 'login' %}">Klik link berikut untuk login</a>'
+  })
+  {% else %}
+  Swal.fire({
+    icon: 'info',
+    title: '<strong>{{message}}</strong>',
   })
   {% endif %}
   

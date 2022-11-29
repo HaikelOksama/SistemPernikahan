@@ -100,8 +100,8 @@
               </div>
             </div>
         
+      {% if request.user.is_superuser %}
       <div class="card-footer border border-top-3 border-dark">
-
           <form action="" method="post">
             {% csrf_token %}
             <center><div class="form-check ml-4">
@@ -111,6 +111,7 @@
             <center><button type="submit" class="btn btn-outline-primary w-50 ml-4">Konfirmasi Data</button></center>
         </form>
       </div>
+      {% endif %}
 
     </div>
     </div>

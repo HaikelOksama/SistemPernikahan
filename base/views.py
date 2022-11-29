@@ -22,7 +22,7 @@ def register(request):
             print(request.POST)
             newUser = userForm.save()
             print(newUser)
-            messages.success(request, 'daftarSukses')
+            messages.info(request, 'daftarSukses')
             return redirect('landing')
 
             
@@ -49,12 +49,26 @@ def login_view(request):
 
     return render(request, 'base/login.html')
 
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.success(request, 'Terimakasih telah menggunakan sistem ini!')
+        return redirect('landing')
+    else:
+        return redirect('login')
+
+@login_required(login_url='login')   
 def index(request):
     page = 'Dashboard'
     akad = Akad.objects.all()
     pending = Akad.objects.filter(diperiksa = False)
     penghulu = Penghulu.objects.all()
-    akadUser = Akad.objects.filter(user = request.user)
+    try:
+        akadUser = Akad.objects.filter(user = request.user)[0]
+        print(akadUser.diperiksa)
+    except:
+        akadUser = Akad.objects.none()
+
     context = {
         'page': page,
         'akad': akad,
@@ -64,7 +78,10 @@ def index(request):
     }
     return render(request, 'base/index.html', context)
 
+@login_required(login_url='login')   
 def akad_view(request):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = 'Akad'
     akadModels = Akad.objects.all()
     for wali in akadModels:
@@ -75,12 +92,22 @@ def akad_view(request):
     }
     return render(request, 'base/akad.html', context)
 
+@login_required(login_url='login')   
 def daftar_akad_view(request):
     page = 'Pendaftaran Pernikahan Baru'
     formAkad = AkadForm()
     formIstri = IstriForm()
     formSuami = SuamiForm()
     
+    if request.user.is_superuser == False:
+        
+        akadUser = Akad.objects.filter(user=request.user).count()
+  
+        if akadUser != 0:
+            akadUser = Akad.objects.filter(user=request.user)[0]
+            print(akadUser.id)
+            return redirect('detail_akad', akadUser.id)
+                 
     if request.method == 'POST':
         formIstri = IstriForm(request.POST, request.FILES)
         formSuami = SuamiForm(request.POST, request.FILES)
@@ -94,6 +121,11 @@ def daftar_akad_view(request):
             akad.istri = istri
             akad.save()
             messages.success(request, f'{akad} Berhasil Titambahkan')
+            
+            if request.user.is_superuser == False:
+                messages.info(request, 'akadAdded')
+                return redirect('syarat-akad')
+            
             return redirect('akad')
     
     
@@ -106,7 +138,10 @@ def daftar_akad_view(request):
     
     return render(request, 'base/daftar_akad.html', context)
 
+@login_required(login_url='login')   
 def data_suami_view(request):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = 'Data Suami'
     suamiList = Suami.objects.all()
     
@@ -117,7 +152,10 @@ def data_suami_view(request):
     
     return render(request, 'base/data_suami_istri.html', context)
 
+@login_required(login_url='login')   
 def data_istri_view(request):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = 'Data Istri'
     suamiList = Istri.objects.all()
     
@@ -128,14 +166,19 @@ def data_istri_view(request):
     
     return render(request, 'base/data_suami_istri.html', context)
 
+@login_required(login_url='login')   
 def detail_akad_view(request, pk):
+    
     akad = Akad.objects.get(id=pk)
     page = f'Detail Pernikahan {akad}'
     form = AkadEditForm(instance = akad)
     confirm = KonfirmasiForm(instance = akad, use_required_attribute=True)
     listWali = akad.wali_set.all()
     # print(listWali)
-   
+    if request.user.is_superuser == False:
+        if akad.user != request.user:
+            return redirect('index')
+
     if request.method == 'POST':  
         if request.POST.get('diperiksa'):
             confirm = KonfirmasiForm(request.POST, instance = akad)
@@ -162,7 +205,10 @@ def detail_akad_view(request, pk):
     }
     return render(request, 'base/detail_akad.html', context)
 
+@login_required(login_url='login')   
 def hapus_akad(request, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     akad = Akad.objects.get(id=pk)
     akad.suami.delete()
     akad.istri.delete()
@@ -170,6 +216,7 @@ def hapus_akad(request, pk):
     akad.delete()
     return redirect('akad')
 
+@login_required(login_url='login')   
 def tambah_wali(request, pk):
     akad = Akad.objects.get(id=pk)
     page = f'Tambah Wali {akad}'
@@ -190,7 +237,10 @@ def tambah_wali(request, pk):
     }
     return render(request, 'base/tambah_wali.html', context)
 
+@login_required(login_url='login')   
 def ubah_wali(request, akad, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     akad = Akad.objects.get(id=akad)
     wali = Wali.objects.get(id=pk)
     page = f'Ubah Data Wali'
@@ -210,13 +260,19 @@ def ubah_wali(request, akad, pk):
     }
     return render(request, 'base/tambah_wali.html', context)
 
+@login_required(login_url='login')   
 def hapus_wali(request,akad, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')    
     wali = Wali.objects.get(id=pk)
     wali.delete(keep_parents=True)
     messages.warning(request, f'Data Wali {wali.nama} Telah Dihapus')
     return redirect('detail_akad', akad)
 
+@login_required(login_url='login')   
 def edit_suami_view(request, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     suami = Suami.objects.get(id=pk)
     page = f'Ubah Data Suami'
     form = SuamiForm(instance=suami)
@@ -235,7 +291,10 @@ def edit_suami_view(request, pk):
     }
     return render(request, 'base/edit_pasangan.html', context)
 
+@login_required(login_url='login')   
 def edit_istri_view(request, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     istri = Istri.objects.get(id=pk)
     page = f'Ubah Data Istri'
     form = IstriForm(instance=istri)
@@ -255,7 +314,10 @@ def edit_istri_view(request, pk):
     return render(request, 'base/edit_pasangan.html', context)
 
 
+@login_required(login_url='login')   
 def penghulu_view(request):
+    if request.user.is_superuser == False:
+        return redirect('index')
     penghulu = Penghulu.objects.all()
     page = 'Data Penghulu'
     
@@ -265,7 +327,10 @@ def penghulu_view(request):
     }
     return render(request, 'base/penghulu.html', context)
 
+@login_required(login_url='login')   
 def tambah_penghulu(request):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = 'Tambah Penghulu'
     form = PenghuluForm()
     if request.method == 'POST':
@@ -280,7 +345,10 @@ def tambah_penghulu(request):
     }
     return render(request, 'base/tambah_penghulu.html', context)
 
+@login_required(login_url='login')   
 def ubah_penghulu(request, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = 'Ubah Data Penghulu'
     penghulu = Penghulu.objects.get(id=pk)
     form = PenghuluForm(instance=penghulu)
@@ -297,7 +365,10 @@ def ubah_penghulu(request, pk):
     }
     return render(request, 'base/tambah_penghulu.html', context)
 
+@login_required(login_url='login')   
 def hapus_penghulu(request, pk):
+    if request.user.is_superuser == False:
+        return redirect('index')
     penghulu = Penghulu.objects.get(id=pk)
     try:
         messages.warning(request, f'Penghulu {penghulu.nama} Telah Dihapus')
@@ -307,7 +378,10 @@ def hapus_penghulu(request, pk):
         
     return redirect('penghulu')
 
+@login_required(login_url='login')   
 def cetak_data(request, akad=None):
+    if request.user.is_superuser == False:
+        return redirect('index')
     page = "Cetak"
     html = 'cetak.html'
     now = date.today().strftime('%d %B %Y')
@@ -326,3 +400,7 @@ def cetak_data(request, akad=None):
         pageName = 'all'
     
     return render(request, f'base/{html}', context={'akad': akad, 'pageName': pageName, 'page':page, 'dateMsg': dateMsg})
+
+@login_required(login_url='login')
+def syarat_akad(request):
+    return render(request, "base/syarat.html", context={})

@@ -74,6 +74,9 @@ class Akad(models.Model):
     created = models.DateTimeField(auto_now_add=True, null = True)
     updated = models.DateTimeField(auto_now = True)
     
+    class Meta:
+        ordering = ["-created"]
+    
     def __str__(self):
         return f"Akad {self.suami} dan {self.istri}"
     
